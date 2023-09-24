@@ -31,8 +31,8 @@ Enter the desired options into the "Custom Data" for the Text Panel
 *Mods clearing chat will clear the chat message screens*  
 
 ## Multi-player
-This mod works in multi-player, the Twitch ChatBot must be running on the host machine
-*currently only tested via Steam Client hosted multi-player session. Not tested on headless server.
+This mod works in multi-player, the Twitch ChatBot must be running on the host machine  
+Currently only tested via Steam Client hosted multi-player session. Not tested on headless server.
 
 ## Notes
 This mod requires the use of the Twitch ChatBot to monitor Twitch chat and update the data used by the mod.  
