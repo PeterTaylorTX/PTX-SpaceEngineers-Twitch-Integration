@@ -11,7 +11,7 @@ The Steam mod can be found at https://steamcommunity.com/sharedfiles/filedetails
 # Chat Bot
 ## Setup 
 1. When first running the bot, you will be asked for the Twitch channel name.  
-1. Then, a Twitch Authentication request webpage will open. Log in and copy the "access_token" from the response page URL and enter the token at the "Access Token" prompt.
+1. Copy the Access Token and paste it at the "Access Token" prompt.
   
   
 # In Game Usage
