@@ -5,6 +5,7 @@ The Steam mod can be found https://steamcommunity.com/sharedfiles/filedetails/?i
 ## Main Features
 * Show a subscriber list on Text Panels
 * Show the last subscriber on Text Panels
+* Show recent chat messages on Text Panels
 * Show the last chat message on Text Panels
 
 # Chat Bot
@@ -16,8 +17,8 @@ The Steam mod can be found https://steamcommunity.com/sharedfiles/filedetails/?i
 # In Game Usage
 ## Text Panel
 ### Setup
-Add "ptx-twitch" to the name of a text panel.  
-The Panel will update with a list of options  
+Add "ptx-twitch" to the name of a Text Panel.  
+The panel will update with a list of options  
 Enter the desired options into the "Custom Data" for the Text Panel
 
 ### Options
@@ -29,8 +30,9 @@ Enter the desired options into the "Custom Data" for the Text Panel
 @text - Adds custom text | example "@text=this is an example" (without the ")  
 *Mods clearing chat will clear the chat message screens*  
 
-## Multiplayer
-This mod works in multiplayer, the Twitch ChatBot must be running on the host machine
+## Multi-player
+This mod works in multi-player, the Twitch ChatBot must be running on the host machine
+*currently only tested via Steam Client hosted multi-player session. Not tested on headless server.
 
 ## Notes
 This mod requires the use of the Twitch ChatBot to monitor Twitch chat and update the data used by the mod.  
