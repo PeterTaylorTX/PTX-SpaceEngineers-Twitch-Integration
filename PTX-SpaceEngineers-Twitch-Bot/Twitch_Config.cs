@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,7 +51,12 @@ namespace PTX_SpaceEngineers_Twitch_Bot
                 value = Newtonsoft.Json.JsonConvert.DeserializeObject<Twitch_Config>(configData);
                 bool newConfig = false;
                 if (value.channelName.Contains("Twitch Channel Name")) { value.getChannelName(); newConfig = true; }
-                if (value.OAuthToken.Contains("OAuth Token")) { value.getToken(); newConfig = true; }
+                if (value.OAuthToken == null || value.OAuthToken.Contains("OAuth Token"))
+                {
+                    value.getToken();
+                    value.ListenForAccessToken();
+                    newConfig = true;
+                }
                 if (newConfig)
                 {
                     Console.Clear();
@@ -64,6 +70,7 @@ namespace PTX_SpaceEngineers_Twitch_Bot
             {
                 Debug.WriteLine(ex.Message);
                 if (value == null) { return new Twitch_Config(); }
+                Environment.Exit(1);
                 return value;
             }
         }
@@ -94,7 +101,7 @@ namespace PTX_SpaceEngineers_Twitch_Bot
             {
                 Twitch_Config config = new Twitch_Config()
                 {
-                    clientID = "t2ln9gd0x4gqgp9na1pxdeh0s2otft", // Public Client ID for this app, change if you want to run your own app version
+                    clientID = "0k27g4regg9eeu2brccbuwigv55nji", // Public Client ID for this app, change if you want to run your own app version
                     channelName = "Twitch Channel Name",
                     OAuthToken = "OAuth Token",
                     numberOfChatMessages = 5
@@ -120,17 +127,32 @@ namespace PTX_SpaceEngineers_Twitch_Bot
                 string authScopes = "chat:edit+chat:read+channel:read:subscriptions";
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = $"https://id.twitch.tv/oauth2/authorize?client_id={this.clientID}&response_type=token&scope={authScopes}&redirect_uri=http://localhost",
+                    FileName = $"https://id.twitch.tv/oauth2/authorize?client_id={this.clientID}&response_type=token&scope={authScopes}&redirect_uri={System.Web.HttpUtility.UrlEncode("http://localhost:54856")}",
                     UseShellExecute = true
                 });
-                Console.WriteLine("Please enter the Access Token:");
-                this.OAuthToken = Console.ReadLine();
-                this.WriteConfig();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+
+        }
+
+        public void ListenForAccessToken()
+        {
+            Helpers.httpServer.runServer("http://localhost", "54856");
+            Console.WriteLine("Please enter the Access Token:");
+            this.OAuthToken = Console.ReadLine();
+
+            if (this.OAuthToken == null)
+            {
+                Console.WriteLine("Unable to access auth key.");
+                Console.WriteLine("Reason:");
+                Console.WriteLine("Press any key to close.");
+                Console.ReadLine();
+                Environment.Exit(0);
+            }
+            this.WriteConfig();
 
         }
         /// <summary>

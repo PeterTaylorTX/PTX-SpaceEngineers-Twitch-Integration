@@ -152,6 +152,8 @@ namespace PTX_SpaceEngineers_Twitch_Bot
         private void onJoinedChannel(object? sender, OnJoinedChannelArgs e)
         {
             Console.WriteLine($"joined {e.Channel}");
+            Console.WriteLine($"You can now load your save file.");
+            Console.WriteLine($"Have fun in Space Engineers!");
             if (!Debugger.IsAttached)
             {
                 client.SendMessage(this.config.channelName, $"PTX Space Engineers bot is online");
