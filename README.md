@@ -1,5 +1,6 @@
 # PTX Space Engineers Twitch Integration
-This mod works to bring Twitch integration into your Space Engineers game
+This mod works to bring Twitch integration into your Space Engineers game  
+The Steam mod can be found https://steamcommunity.com/sharedfiles/filedetails/?id=3039895610  
 
 ## Main Features
 * Show a subscriber list on Text Panels
