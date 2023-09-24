@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>PTX_SpaceEngineers_Twitch_Bot</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TwitchLib" Version="3.5.3" />
+    <PackageReference Include="TwitchLib.Api" Version="3.9.0" />
+    <PackageReference Include="TwitchLib.Api.Core" Version="3.9.0" />
+    <PackageReference Include="TwitchLib.Api.Core.Enums" Version="3.9.0" />
+    <PackageReference Include="TwitchLib.Api.Core.Interfaces" Version="3.9.0" />
+    <PackageReference Include="TwitchLib.Api.Core.Models" Version="3.9.0" />
+    <PackageReference Include="TwitchLib.Api.Helix" Version="3.9.0" />
+    <PackageReference Include="TwitchLib.Api.Helix.Models" Version="3.9.0" />
+    <PackageReference Include="TwitchLib.Client" Version="3.3.1" />
+    <PackageReference Include="TwitchLib.Client.Enums" Version="3.3.1" />
+    <PackageReference Include="TwitchLib.Client.Models" Version="3.3.1" />
+    <PackageReference Include="TwitchLib.Communication" Version="1.0.6" />
+    <PackageReference Include="TwitchLib.EventSub.Core" Version="2.4.3" />
+    <PackageReference Include="TwitchLib.EventSub.Websockets" Version="0.4.0" />
+    <PackageReference Include="TwitchLib.PubSub" Version="3.2.6" />
+  </ItemGroup>
+
+</Project>
