@@ -39,3 +39,8 @@ This mod requires the use of the Twitch ChatBot to monitor Twitch chat and updat
   
 If you would like to use your own ChatBot, the files this mod reads for the Text Panel updates are located at: %appdata%\SpaceEngineers\Storage\PTX-Twitch_Chat_Integration  
 
+
+## Framework
+There are two downloads in the release folder.  
+PTX-SpaceEngineers-Twitch-Bot-dotNet6 requires dotNet6 is installed.  
+PTX-SpaceEngineers-Twitch-Bot-IncFramework includes the framework, but it a larger file.
