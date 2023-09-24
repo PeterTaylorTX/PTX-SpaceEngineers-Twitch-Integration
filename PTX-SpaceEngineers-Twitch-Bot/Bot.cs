@@ -1,9 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Net.Sockets;
-using System.Reflection.Metadata.Ecma335;
+﻿using System.Diagnostics;
 using System.Text;
-using TwitchLib.Api.Core.Common;
 using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 using TwitchLib.Communication.Events;
