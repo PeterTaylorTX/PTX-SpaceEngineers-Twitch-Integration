@@ -10,16 +10,16 @@ The Steam mod can be found https://steamcommunity.com/sharedfiles/filedetails/?i
 
 # Chat Bot
 ## Setup 
-1. When first running the bot you will be asked for the Twitch channel name  
-1. Then a Twitch Authentication request webpage will open. Log in and copy the "access_token" from the response page URL and enter the token at the "Access Token" prompt.
+1. When first running the bot, you will be asked for the Twitch channel name.  
+1. Then, a Twitch Authentication request webpage will open. Log in and copy the "access_token" from the response page URL and enter the token at the "Access Token" prompt.
   
   
 # In Game Usage
 ## Text Panel
 ### Setup
 Add "ptx-twitch" to the name of a Text Panel.  
-The panel will update with a list of options  
-Enter the desired options into the "Custom Data" for the Text Panel
+The panel will update with a list of options.  
+Enter the desired options into the "Custom Data" for the Text Panel.
 
 ### Options
 @Subscribers - A list of all current Twitch Subscribers  
@@ -32,11 +32,10 @@ Enter the desired options into the "Custom Data" for the Text Panel
 
 ## Multi-player
 This mod works in multi-player, the Twitch ChatBot must be running on the host machine  
-Currently only tested via Steam Client hosted multi-player session. Not tested on headless server.
+*Currently only tested via Steam Client hosted multi-player session. Not tested on headless server.*
 
 ## Notes
 This mod requires the use of the Twitch ChatBot to monitor Twitch chat and update the data used by the mod.  
-The Twitch ChatBot can be found at [link to come]  
   
 If you would like to use your own ChatBot, the files this mod reads for the Text Panel updates are located at %appdata%\SpaceEngineers\Storage\PTX-Twitch_Chat_Integration  
 
