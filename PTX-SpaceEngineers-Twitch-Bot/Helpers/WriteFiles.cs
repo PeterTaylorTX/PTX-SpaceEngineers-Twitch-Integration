@@ -18,7 +18,7 @@ namespace PTX_SpaceEngineers_Twitch_Bot.Helpers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ERROR] {ex.Message}");
+                Console.WriteLine($"[ERROR] {ex.Message}");
                 if (tryAgain)
                 {
                     System.Threading.Thread.Sleep(1000);
@@ -27,15 +27,31 @@ namespace PTX_SpaceEngineers_Twitch_Bot.Helpers
             }
         }
 
+        protected static void checkFolder()
+        {
+            try
+            {
+                if (!System.IO.Directory.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SpaceEngineers\\Storage\\PTX-Twitch_Chat_Integration"))
+                {
+                    System.IO.Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SpaceEngineers\\Storage\\PTX-Twitch_Chat_Integration");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] {ex.Message}");
+            }
+        }
+
         public static bool fileExistsSpaceEngineersFiles(string filename)
         {
             try
             {
+                checkFolder();
                 return System.IO.File.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SpaceEngineers\\Storage\\PTX-Twitch_Chat_Integration\\{filename}");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[ERROR] {ex.Message}");
+                Console.WriteLine($"[ERROR] {ex.Message}");
             }
             return false;
         }
