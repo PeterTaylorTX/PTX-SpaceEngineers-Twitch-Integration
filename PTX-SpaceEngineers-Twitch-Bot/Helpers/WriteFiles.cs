@@ -9,12 +9,13 @@ namespace PTX_SpaceEngineers_Twitch_Bot.Helpers
         public const string file_lastChatMessage = "PTX_Twitch_lastChatMessage.txt";
         public const string file_ChatMessages = "PTX_Twitch_ChatMessages.txt";
         public const string file_TwitchChannel = "PTX_Twitch_Channel.txt";
+        static string folderName = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SpaceEngineers\\Storage\\3039895610.sbm_Chat_Integration";
 
         public static void writeSpaceEngineersFiles(string filename, string data, bool tryAgain = true)
         {
             try
             {
-                System.IO.File.WriteAllText($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SpaceEngineers\\Storage\\PTX-Twitch_Chat_Integration\\{filename}", data);
+                System.IO.File.WriteAllText($"{folderName}\\{filename}", data);
             }
             catch (Exception ex)
             {
@@ -31,9 +32,9 @@ namespace PTX_SpaceEngineers_Twitch_Bot.Helpers
         {
             try
             {
-                if (!System.IO.Directory.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SpaceEngineers\\Storage\\PTX-Twitch_Chat_Integration"))
+                if (!System.IO.Directory.Exists($"{folderName}"))
                 {
-                    System.IO.Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SpaceEngineers\\Storage\\PTX-Twitch_Chat_Integration");
+                    System.IO.Directory.CreateDirectory($"{folderName}");
                 }
             }
             catch (Exception ex)
@@ -47,7 +48,7 @@ namespace PTX_SpaceEngineers_Twitch_Bot.Helpers
             try
             {
                 checkFolder();
-                return System.IO.File.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SpaceEngineers\\Storage\\PTX-Twitch_Chat_Integration\\{filename}");
+                return System.IO.File.Exists($"{folderName}\\{filename}");
             }
             catch (Exception ex)
             {

@@ -51,16 +51,21 @@ namespace PTX
         /// Number of text lines removed for scrolling
         /// </summary>
         internal Int32 textLinesRemoved = -2;
+        /// <summary>
+        /// The last error
+        /// </summary>
+        public static string lastErrorMessage { get; set; }
         public override void Init(MyObjectBuilder_EntityBase objectBuilder)
         {
             base.Init(objectBuilder);
             m_objectBuilder = objectBuilder;
             streamer = readFileFromHDD("PTX_Twitch_Channel.txt");
-            if (streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
+            //if (streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
 
             this.NeedsUpdate = MyEntityUpdateEnum.EACH_100TH_FRAME;
             this.block = (Sandbox.ModAPI.Ingame.IMyTextPanel)this.Entity;
             MyLog.Default.WriteLineAndConsole($"[PTX_INFO] LOADED");
+            writeFileToHDD("info.txt", "Find the mod author live on https://twitch.tv/PetereTaylorTX");
         }
 
         public override void UpdateAfterSimulation100()
@@ -68,19 +73,10 @@ namespace PTX
             base.UpdateAfterSimulation100();
 
             streamer = readFileFromHDD("PTX_Twitch_Channel.txt");
-            if (String.IsNullOrWhiteSpace(streamer) || streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
-            // Get the last time the Twitch bot saw the streamer, make bot inactive is the streamer has not been seen in X hours
-            if (streamer.Contains("|"))
-            {
-                streamer = streamer.Split(char.Parse("|"))[0];
-            }
-            //if (streamerLastSeen > DateTime.UtcNow.AddHours(6)) { return; }
-            // Get the last time the Twitch bot saw the streamer, make bot inactive is the streamer has not been seen in X hours
+            //if (String.IsNullOrWhiteSpace(streamer) || streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
 
             if (!block.DisplayNameText.ToLower().Contains("ptx-twitch")) { return; }
             if (MyAPIGateway.Session.Player == null) { return; }
-
-            //MyLog.Default.WriteLineAndConsole($"[PTX_INFO] TICK 100 FRAME");
 
             try
             {
@@ -96,6 +92,7 @@ namespace PTX
                     if (commandLine.Contains("@chatmessages")) { output = GetChatMessages(output); intActiveCommands += 1; }
                     if (commandLine.Contains("@echo")) { output.AppendLine(); }
                     if (commandLine.Contains("@text=")) { output.Append(commandLine.Replace("@text=", string.Empty)); }
+                    if (commandLine.Contains("@debug")) { output = GetDebugInfo(output); intActiveCommands += 1; }
                 }
 
 
@@ -118,10 +115,34 @@ namespace PTX
             catch (Exception e) // NOTE: never use try-catch for code flow or to ignore errors! catching has a noticeable performance impact.
             {
                 MyLog.Default.WriteLineAndConsole($"[ERROR]{e.Message}\n{e.StackTrace}");
+                lastErrorMessage = e.Message;
 
                 if (MyAPIGateway.Session?.Player != null)
-                    MyAPIGateway.Utilities.ShowNotification($"[ ERROR: {GetType().FullName}: {e.Message} | Send SpaceEngineers.Log to mod author ]", 10000, MyFontEnum.Red);
+                    MyAPIGateway.Utilities.ShowNotification($"[ ERROR: {GetType().FullName}: {e.Message} | Send SpaceEngineers.Log to mod author]", 10000, MyFontEnum.Red);
             }
+        }
+
+        private StringBuilder GetDebugInfo(StringBuilder output)
+        {
+            //string rawText = readFileFromHDD("PTX_Twitch_Subscribers.txt");
+            //char[] delims = new[] { '\r', '\n' };
+            //string[] values = rawText.Split(delims, StringSplitOptions.RemoveEmptyEntries);
+
+
+            output.AppendLine("Debug Info");
+            output.AppendLine("==========");
+            output.AppendLine($"Streamer: {streamer}");
+            if (this.NeedsUpdate == MyEntityUpdateEnum.EACH_100TH_FRAME) { output.AppendLine($"Update Interval: Every 100 ticks"); }
+            output.AppendLine($"Last Error: {lastErrorMessage}");
+
+            //if (values == null) { return output; }
+
+            //foreach (string value in values)
+            //{
+            //    output.AppendLine(value);
+            //}
+
+            return output;
         }
 
         /// <summary>
@@ -191,7 +212,11 @@ namespace PTX
 
         protected string readFileFromHDD(string filename)
         {
-            if (!MyAPIGateway.Utilities.FileExistsInLocalStorage(filename, typeof(PTX_Twitch_SE_Mod))) { return $"{filename} File not found"; }
+            if (!MyAPIGateway.Utilities.FileExistsInLocalStorage(filename, typeof(PTX_Twitch_SE_Mod)))
+            {
+                lastErrorMessage = $"{filename} File not found";
+                return $"{filename} File not found";
+            }
             var reader = MyAPIGateway.Utilities.ReadFileInLocalStorage(filename, typeof(PTX_Twitch_SE_Mod));
             string rawText = reader.ReadToEnd();
             reader.Close();
