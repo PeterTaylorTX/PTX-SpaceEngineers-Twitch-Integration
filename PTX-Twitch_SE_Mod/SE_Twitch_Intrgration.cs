@@ -58,25 +58,40 @@ namespace PTX
         public override void Init(MyObjectBuilder_EntityBase objectBuilder)
         {
             base.Init(objectBuilder);
-            m_objectBuilder = objectBuilder;
-            streamer = readFileFromHDD("PTX_Twitch_Channel.txt");
-            //if (streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
 
-            this.NeedsUpdate = MyEntityUpdateEnum.EACH_100TH_FRAME;
-            this.block = (Sandbox.ModAPI.Ingame.IMyTextPanel)this.Entity;
-            MyLog.Default.WriteLineAndConsole($"[PTX_INFO] LOADED");
-            writeFileToHDD("info.txt", "Find the mod author live on https://twitch.tv/PetereTaylorTX");
+            try
+            {
+                m_objectBuilder = objectBuilder;
+                streamer = readFileFromHDD("PTX_Twitch_Channel.txt");
+                //if (streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
+
+                this.NeedsUpdate = MyEntityUpdateEnum.EACH_100TH_FRAME;
+                this.block = (Sandbox.ModAPI.Ingame.IMyTextPanel)this.Entity;
+                MyLog.Default.WriteLineAndConsole($"[PTX_INFO] LOADED");
+                writeFileToHDD("info.txt", "Find the mod author live on https://twitch.tv/PetereTaylorTX");
+            }
+            catch (Exception e)
+            {
+                MyLog.Default.WriteLineAndConsole($"[ERROR]{e.Message}\n{e.StackTrace}");
+            }
         }
 
         public override void UpdateAfterSimulation100()
         {
             base.UpdateAfterSimulation100();
 
-            streamer = readFileFromHDD("PTX_Twitch_Channel.txt");
-            //if (String.IsNullOrWhiteSpace(streamer) || streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
+            try
+            {
+                streamer = readFileFromHDD("PTX_Twitch_Channel.txt");
+                //if (String.IsNullOrWhiteSpace(streamer) || streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
 
-            if (!block.DisplayNameText.ToLower().Contains("ptx-twitch")) { return; }
-            if (MyAPIGateway.Session.Player == null) { return; }
+                if (!block.DisplayNameText.ToLower().Contains("ptx-twitch")) { return; }
+                if (MyAPIGateway.Session.Player == null) { return; }
+            }
+            catch (Exception e)
+            {
+                MyLog.Default.WriteLineAndConsole($"[ERROR]{e.Message}\n{e.StackTrace}");
+            }
 
             try
             {
@@ -124,23 +139,26 @@ namespace PTX
 
         private StringBuilder GetDebugInfo(StringBuilder output)
         {
-            //string rawText = readFileFromHDD("PTX_Twitch_Subscribers.txt");
-            //char[] delims = new[] { '\r', '\n' };
-            //string[] values = rawText.Split(delims, StringSplitOptions.RemoveEmptyEntries);
+            try
+            {
+                output.AppendLine("Debug Info");
+                output.AppendLine("==========");
+                output.AppendLine($"Streamer: {streamer}");
+                if (this.NeedsUpdate == MyEntityUpdateEnum.EACH_100TH_FRAME) { output.AppendLine($"Update Interval: Every 100 ticks"); }
+                output.AppendLine($"Last Error: {lastErrorMessage}");
 
+                //if (values == null) { return output; }
 
-            output.AppendLine("Debug Info");
-            output.AppendLine("==========");
-            output.AppendLine($"Streamer: {streamer}");
-            if (this.NeedsUpdate == MyEntityUpdateEnum.EACH_100TH_FRAME) { output.AppendLine($"Update Interval: Every 100 ticks"); }
-            output.AppendLine($"Last Error: {lastErrorMessage}");
+                //foreach (string value in values)
+                //{
+                //    output.AppendLine(value);
+                //}
 
-            //if (values == null) { return output; }
-
-            //foreach (string value in values)
-            //{
-            //    output.AppendLine(value);
-            //}
+            }
+            catch (Exception e)
+            {
+                MyLog.Default.WriteLineAndConsole($"[ERROR]{e.Message}\n{e.StackTrace}");
+            }
 
             return output;
         }
@@ -151,18 +169,25 @@ namespace PTX
         /// <param name="output"></param>
         protected StringBuilder GetSubscribers(StringBuilder output)
         {
-            string rawText = readFileFromHDD("PTX_Twitch_Subscribers.txt");
-            char[] delims = new[] { '\r', '\n' };
-            string[] values = rawText.Split(delims, StringSplitOptions.RemoveEmptyEntries);
-
-
-            output.AppendLine("Subscribers");
-            output.AppendLine("==========");
-            if (values == null) { return output; }
-
-            foreach (string value in values)
+            try
             {
-                output.AppendLine(value);
+                string rawText = readFileFromHDD("PTX_Twitch_Subscribers.txt");
+                char[] delims = new[] { '\r', '\n' };
+                string[] values = rawText.Split(delims, StringSplitOptions.RemoveEmptyEntries);
+
+
+                output.AppendLine("Subscribers");
+                output.AppendLine("==========");
+                if (values == null) { return output; }
+
+                foreach (string value in values)
+                {
+                    output.AppendLine(value);
+                }
+            }
+            catch (Exception e)
+            {
+                MyLog.Default.WriteLineAndConsole($"[ERROR]{e.Message}\n{e.StackTrace}");
             }
 
             return output;
@@ -175,10 +200,17 @@ namespace PTX
         /// <returns></returns>
         private StringBuilder GetLastSubscriber(StringBuilder output)
         {
-            string value = readFileFromHDD("PTX_Twitch_lastSubscriber.txt");
-            output.AppendLine("Last Subscriber");
-            output.AppendLine("===============");
-            output.AppendLine(value);
+            try
+            {
+                string value = readFileFromHDD("PTX_Twitch_lastSubscriber.txt");
+                output.AppendLine("Last Subscriber");
+                output.AppendLine("===============");
+                output.AppendLine(value);
+            }
+            catch (Exception e)
+            {
+                MyLog.Default.WriteLineAndConsole($"[ERROR]{e.Message}\n{e.StackTrace}");
+            }
             return output;
         }
 
@@ -189,10 +221,17 @@ namespace PTX
         /// <returns></returns>
         private StringBuilder GetChatMessages(StringBuilder output)
         {
-            string value = readFileFromHDD("PTX_Twitch_ChatMessages.txt");
-            output.AppendLine("Twitch Chat");
-            output.AppendLine("===========");
-            output.AppendLine(value);
+            try
+            {
+                string value = readFileFromHDD("PTX_Twitch_ChatMessages.txt");
+                output.AppendLine("Twitch Chat");
+                output.AppendLine("===========");
+                output.AppendLine(value);
+            }
+            catch (Exception e)
+            {
+                MyLog.Default.WriteLineAndConsole($"[ERROR]{e.Message}\n{e.StackTrace}");
+            }
             return output;
         }
 
@@ -203,33 +242,55 @@ namespace PTX
         /// <returns></returns>
         private StringBuilder GetLastChatMessage(StringBuilder output)
         {
-            string value = readFileFromHDD("PTX_Twitch_lastChatMessage.txt");
-            output.AppendLine("Last Chat Message");
-            output.AppendLine("=================");
-            output.AppendLine(value);
+            try
+            {
+                string value = readFileFromHDD("PTX_Twitch_lastChatMessage.txt");
+                output.AppendLine("Last Chat Message");
+                output.AppendLine("=================");
+                output.AppendLine(value);
+            }
+            catch (Exception e)
+            {
+                MyLog.Default.WriteLineAndConsole($"[ERROR]{e.Message}\n{e.StackTrace}");
+            }
             return output;
         }
 
         protected string readFileFromHDD(string filename)
         {
-            if (!MyAPIGateway.Utilities.FileExistsInLocalStorage(filename, typeof(PTX_Twitch_SE_Mod)))
+            try
             {
-                lastErrorMessage = $"{filename} File not found";
-                return $"{filename} File not found";
+                if (!MyAPIGateway.Utilities.FileExistsInLocalStorage(filename, typeof(PTX_Twitch_SE_Mod)))
+                {
+                    lastErrorMessage = $"{filename} File not found";
+                    return $"{filename} File not found";
+                }
+                var reader = MyAPIGateway.Utilities.ReadFileInLocalStorage(filename, typeof(PTX_Twitch_SE_Mod));
+                string rawText = reader.ReadToEnd();
+                reader.Close();
+                return rawText;
             }
-            var reader = MyAPIGateway.Utilities.ReadFileInLocalStorage(filename, typeof(PTX_Twitch_SE_Mod));
-            string rawText = reader.ReadToEnd();
-            reader.Close();
-            return rawText;
+            catch (Exception e)
+            {
+                MyLog.Default.WriteLineAndConsole($"[ERROR]{e.Message}\n{e.StackTrace}");
+                return string.Empty;
+            }
         }
 
         protected void writeFileToHDD(string filename, string data)
         {
-            var writer = MyAPIGateway.Utilities.WriteFileInLocalStorage(filename, typeof(PTX_Twitch_SE_Mod));
-            writer.Write(data);
-            writer.Flush();
-            writer.Close();
-            writer.Dispose();
+            try
+            {
+                var writer = MyAPIGateway.Utilities.WriteFileInLocalStorage(filename, typeof(PTX_Twitch_SE_Mod));
+                writer.Write(data);
+                writer.Flush();
+                writer.Close();
+                writer.Dispose();
+            }
+            catch (Exception e)
+            {
+                MyLog.Default.WriteLineAndConsole($"[ERROR]{e.Message}\n{e.StackTrace}");
+            }
         }
 
         /// <summary>
