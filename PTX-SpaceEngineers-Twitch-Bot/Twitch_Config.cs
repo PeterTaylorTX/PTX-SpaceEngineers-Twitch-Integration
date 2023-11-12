@@ -118,7 +118,7 @@ namespace PTX_SpaceEngineers_Twitch_Bot
         {
             try
             {
-                string authScopes = "chat:edit+chat:read+channel:read:subscriptions";
+                string authScopes = "chat:edit+chat:read+channel:read:subscriptions+bits:read+channel:read:redemptions";
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = $"https://id.twitch.tv/oauth2/authorize?client_id={this.clientID}&response_type=token&scope={authScopes}&redirect_uri={System.Web.HttpUtility.UrlEncode("http://localhost:54856")}",

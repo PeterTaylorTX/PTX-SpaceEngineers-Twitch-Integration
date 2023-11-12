@@ -38,7 +38,7 @@ namespace PTX_SpaceEngineers_Twitch_Bot
             if (!Helpers.WriteFiles.fileExistsSpaceEngineersFiles(Helpers.WriteFiles.file_lastChatMessage)) { Helpers.WriteFiles.writeSpaceEngineersFiles(Helpers.WriteFiles.file_lastChatMessage, string.Empty); }
             if (!Helpers.WriteFiles.fileExistsSpaceEngineersFiles(Helpers.WriteFiles.file_ChatMessages)) { Helpers.WriteFiles.writeSpaceEngineersFiles(Helpers.WriteFiles.file_ChatMessages, string.Empty); }
             Helpers.WriteFiles.writeSpaceEngineersFiles(Helpers.WriteFiles.file_TwitchChannel, this.config.channelName ?? string.Empty);
-
+            
             client = new TwitchLib.Client.TwitchClient();
         }
 
@@ -73,7 +73,7 @@ namespace PTX_SpaceEngineers_Twitch_Bot
                 client.OnReSubscriber += onReSubscriberReceived;
                 client.OnChatCommandReceived += onChatCommandReceived;
                 client.Connect();
-                while (!exitApp) { Task.Delay(1000); }
+                while (!exitApp) { System.Threading.Thread.Sleep(1000); }
             }
             catch (Exception ex)
             {
@@ -105,6 +105,26 @@ namespace PTX_SpaceEngineers_Twitch_Bot
                 Console.WriteLine("PTX Space Engineers Integration bot shutting down");
                 this.exitApp = true;
             };
+
+            if(command.ToLower() == "commands") { client.SendMessage(this.config.channelName, "Space Engineers bot Commands Guide: https://docs.google.com/spreadsheets/d/16qNz9PngmQSWH5euSEXnryt6pJpW4wvDKCZp4Pa7-Rg"); }
+            if (command.ToLower() == "se")
+            {
+                if (!string.IsNullOrWhiteSpace(e.Command.ArgumentsAsString))
+                {
+                    if (e.Command.ArgumentsAsString.ToLower() == "commands") { client.SendMessage(this.config.channelName, "Space Engineers bot Commands Guide: https://docs.google.com/spreadsheets/d/16qNz9PngmQSWH5euSEXnryt6pJpW4wvDKCZp4Pa7-Rg"); }
+
+
+                    try
+                    {
+                        bool handelled = Space_Engineers_Interactions.Game_Interaction(e.Command.ArgumentsAsString.ToLower(), e.Command.ChatMessage.Username);
+
+                        if (handelled) { Console.WriteLine($"[EXECUTED] {e.Command.ArgumentsAsString} command | {e.Command.ChatMessage.Username}"); }
+                        else { Console.WriteLine($"[NOT-EXECUTED] Command {e.Command.ArgumentsAsString}"); }
+                    }
+                    catch (Space_Engineers_Interactions_Cooldown_Exception ex) { client.SendMessage(this.config.channelName, $"Command {ex.Command} in cooldown for {ex.RemainingCooldown} seconds"); }
+                    catch (Exception ex) { Console.WriteLine($"[ERROR] Command {e.Command.ArgumentsAsString} faled to execute. | Reason {ex.Message}"); }
+                }
+            }
         }
 
         /// <summary>
@@ -136,8 +156,8 @@ namespace PTX_SpaceEngineers_Twitch_Bot
             if (this.lastChatMessages.Count >= config.numberOfChatMessages) { this.lastChatMessages.RemoveAt(0); } //Remove the oldest message
             lastChatMessages.Add(currentMessage);
             StringBuilder sbChatMessages = new StringBuilder();
-            lastChatMessages.ForEach(c => { sbChatMessages.AppendLine(c); sbChatMessages.AppendLine(""); }) ;
-            Helpers.WriteFiles.writeSpaceEngineersFiles(Helpers.WriteFiles.file_ChatMessages, sbChatMessages.ToString()) ;
+            lastChatMessages.ForEach(c => { sbChatMessages.AppendLine(c); sbChatMessages.AppendLine(""); });
+            Helpers.WriteFiles.writeSpaceEngineersFiles(Helpers.WriteFiles.file_ChatMessages, sbChatMessages.ToString());
 
             Console.WriteLine($"{e.ChatMessage.DisplayName} | {e.ChatMessage.Message}");
         }
@@ -147,6 +167,7 @@ namespace PTX_SpaceEngineers_Twitch_Bot
         /// </summary>
         private void onJoinedChannel(object? sender, OnJoinedChannelArgs e)
         {
+            Space_Engineers_Interactions.Setup();
             Console.WriteLine($"joined {e.Channel}");
             Console.WriteLine($"You can now load your save file.");
             Console.WriteLine($"Have fun in Space Engineers!");
@@ -223,5 +244,13 @@ namespace PTX_SpaceEngineers_Twitch_Bot
             await this.twitchAPI.updateSubsList();
         }
 
+        /// <summary>
+        /// Event on Bits Used
+        /// </summary>
+        public void Pub_OnBitsReceivedV2(object? sender, TwitchLib.PubSub.Events.OnBitsReceivedV2Args e)
+        {
+            if (e.TotalBitsUsed == 0) { return; }
+            bool handelled = Space_Engineers_Interactions.Game_Interaction(e.TotalBitsUsed);
+        }
     }
 }

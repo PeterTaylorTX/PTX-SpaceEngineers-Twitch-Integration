@@ -63,7 +63,8 @@ namespace PTX
             {
                 m_objectBuilder = objectBuilder;
                 streamer = readFileFromHDD("PTX_Twitch_Channel.txt");
-                //if (streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
+                if (streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
+                streamer = readFileFromHDD("PTX_Twitch_Channel.txt");
 
                 this.NeedsUpdate = MyEntityUpdateEnum.EACH_100TH_FRAME;
                 this.block = (Sandbox.ModAPI.Ingame.IMyTextPanel)this.Entity;
@@ -82,7 +83,6 @@ namespace PTX
 
             try
             {
-                streamer = readFileFromHDD("PTX_Twitch_Channel.txt");
                 //if (String.IsNullOrWhiteSpace(streamer) || streamer.ToLower().Contains("file not found")) { return; } // Make mod inactive if the Twitch bot is not running
 
                 if (!block.DisplayNameText.ToLower().Contains("ptx-twitch")) { return; }
@@ -99,6 +99,14 @@ namespace PTX
                 block.ContentType = VRage.Game.GUI.TextPanel.ContentType.TEXT_AND_IMAGE;
 
                 Int32 intActiveCommands = 0;
+                if (this.block.CustomData.Contains("@streamer")) // Block Filtered by streamer
+                {
+                    if (!this.block.CustomData.Contains($"@streamer={streamer}")) // Not the current streamer
+                    {
+                        return; //Do nothing
+                    }
+                }
+
                 foreach (string commandLine in this.block.CustomData.ToLower().Split(NewLines(), StringSplitOptions.None))
                 {
                     if (commandLine.Contains("@subscribers")) { output = GetSubscribers(output); intActiveCommands += 1; }
@@ -116,6 +124,7 @@ namespace PTX
                 {
                     output.AppendLine("No Custom Data specified");
                     output.AppendLine("Options:");
+                    output.AppendLine("@Streamer=Streamers Name - Limit to this streamer");
                     output.AppendLine("@Subscribers - A list of Subscribers");
                     output.AppendLine("@LastSubscriber - The last Subscriber");
                     output.AppendLine("@ChatMessages - The last few chat messages");
