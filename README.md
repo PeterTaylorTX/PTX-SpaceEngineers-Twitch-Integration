@@ -21,6 +21,8 @@ Add "ptx-twitch" to the name of a Text Panel.
 The panel will update with a list of options.  
 Enter the desired options into the "Custom Data" for the Text Panel.
 
+<img src="PTX-Twitch_SE_Mod/Content/TwitchChat.png"/>
+
 ### Options
 @Subscribers - A list of all current Twitch Subscribers  
 @LastSubscriber - The last Twitch Subscriber  
@@ -30,9 +32,12 @@ Enter the desired options into the "Custom Data" for the Text Panel.
 @text - Adds custom text | example "@text=this is an example" (without the ")  
 *Mods clearing chat will clear the chat message screens*  
 
+### Chat Commands 
+Chat can run commands to trigger in-game actions like Opening your helmet, turning your Jeypack On/Off, and more (configurable in via a config file in the bot directory)
+The commands available are listed here: https://docs.google.com/spreadsheets/d/16qNz9PngmQSWH5euSEXnryt6pJpW4wvDKCZp4Pa7-Rg/
+
 ## Multi-player
-This mod works in multi-player, the Twitch ChatBot must be running on the host machine.  
-*Currently only tested via Steam Client hosted multi-player session. Not tested on headless server.*
+This mod works in multi-player.
 
 ## Notes
 This mod requires the use of the Twitch ChatBot to monitor Twitch chat and update the data used by the mod.  
