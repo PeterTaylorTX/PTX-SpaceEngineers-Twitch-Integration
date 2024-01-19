@@ -53,7 +53,7 @@ namespace PTX_SpaceEngineers_Twitch_Bot
         /// <returns></returns>
         public static bool Game_Interaction(Int32 Bits)
         {
-            foreach (KeyValuePair<string, Structures.Interaction_Settings> command in keyboardCommands.Where(c => c.Value.TriggerMode.ToLower() == "bits" && c.Value.BitsPrice == Bits))
+            foreach (KeyValuePair<string, Structures.Interaction_Settings> command in keyboardCommands.Where(c => (c.Value.TriggerMode.ToLower() == "bits" || c.Value.TriggerMode.ToLower() == "all") && c.Value.BitsPrice == Bits))
             {
                 Int32 duration = 0;
                 if (command.Key.StartsWith("move")) { duration = 5000; }
