@@ -17,6 +17,10 @@ namespace PTX_SpaceEngineers_Twitch_Bot
         /// </summary>
         public string? OAuthToken { get; set; }
         /// <summary>
+        /// The Expiry Date of the token
+        /// </summary>
+        public DateTime TokenExpiry { get; set; }
+        /// <summary>
         /// The number of chat messages to keep for the chat log
         /// </summary>
         public Int32? numberOfChatMessages { get; set; }
@@ -45,7 +49,7 @@ namespace PTX_SpaceEngineers_Twitch_Bot
                 value = Newtonsoft.Json.JsonConvert.DeserializeObject<Twitch_Config>(configData);
                 bool newConfig = false;
                 if (value.channelName.Contains("Twitch Channel Name")) { value.getChannelName(); newConfig = true; }
-                if (value.OAuthToken == null || value.OAuthToken.Contains("OAuth Token"))
+                if (value.OAuthToken == null || value.OAuthToken.Contains("OAuth Token") || value.TokenExpiry <= DateTime.Now)
                 {
                     value.getToken();
                     value.ListenForAccessToken();
@@ -134,18 +138,8 @@ namespace PTX_SpaceEngineers_Twitch_Bot
 
         public void ListenForAccessToken()
         {
-            Helpers.httpServer.runServer("http://localhost", "54856");
-            Console.WriteLine("Please enter the Access Token:");
-            this.OAuthToken = Console.ReadLine();
-
-            if (this.OAuthToken == null)
-            {
-                Console.WriteLine("Unable to access auth key.");
-                Console.WriteLine("Reason:");
-                Console.WriteLine("Press any key to close.");
-                Console.ReadLine();
-                Environment.Exit(0);
-            }
+            this.OAuthToken = Helpers.httpServer.runServer("http://localhost", "54856");
+            this.TokenExpiry = DateTime.Now.AddDays(30);
             this.WriteConfig();
 
         }
